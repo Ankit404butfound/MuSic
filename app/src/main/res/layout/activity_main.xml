@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    android:fitsSystemWindows="true"
+    android:id="@+id/grandparent"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/btn_search"
+            android:background="@null"></androidx.appcompat.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/toolbar"
+            android:background="#151515"/>
+
+        <ImageButton
+            android:id="@+id/btn_search"
+            android:layout_toLeftOf="@+id/btn_add_song"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@null"
+            android:src="@drawable/ic_icons8_search"
+            app:tint="@color/light_grey"
+            android:foreground="?android:attr/selectableItemBackground"/>
+
+
+        <ImageButton
+            android:id="@+id/btn_add_song"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@null"
+            android:src="@drawable/ic_iconmonstr_plus"
+            app:tint="@color/light_grey"
+            android:textSize="40dp"
+            android:layout_alignParentRight="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_controls"
+            android:layout_below="@+id/toolbar"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_song_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/ll_song_list"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+<!--            </LinearLayout>-->
+
+
+        <LinearLayout
+            android:id="@+id/ll_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/linera_layout_bg"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/lv_song_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:layout_margin="15sp"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:text="MuSic is Love"
+                android:textSize="25dp"
+                android:textColor="@color/light_grey"
+                android:gravity="center"/>
+
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                android:max="100"
+                android:layout_marginHorizontal="15sp"
+                style="@style/MySeekBar"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15sp">
+
+                <TextView
+                    android:id="@+id/time_passed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15sp"
+                    android:text="--:--"
+                    android:textColor="@color/raj_red" />
+
+                <TextView
+                    android:id="@+id/total_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15sp"
+                    android:textColor="@color/light_grey"
+                    android:layout_alignParentEnd="true"
+                    android:text="--:--"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/bottom_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <ImageButton
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10sp"
+                    android:background="@null"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_heart_plus"
+                    app:tint="@color/light_grey" />
+
+
+                <ImageButton
+                    android:id="@+id/i_btn_list_ctrl"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:background="@null"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_shuffle"
+                    android:layout_marginEnd="10sp"
+                    app:tint="@color/light_grey"
+                    android:foreground="?android:attr/selectableItemBackground"/>
+
+
+                <ImageButton
+                    android:id="@+id/btn_pause_play"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:src="@drawable/ic_pause"
+                    android:background="@drawable/round_btn"
+                    app:tint="@color/light_grey"
+                    android:layout_centerInParent="true"
+                    android:foreground="?android:attr/selectableItemBackground"/>
+
+                <ImageButton
+                    app:tint="@color/raj_red"
+                    android:id="@+id/btn_previous"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:layout_marginRight="20sp"
+                    android:background="@null"
+                    android:src="@drawable/ic_previous"
+                    android:layout_toLeftOf="@+id/btn_pause_play"
+                    android:foreground="?android:attr/selectableItemBackground"/>
+
+                <ImageButton
+                    app:tint="@color/raj_red"
+                    android:id="@+id/btn_next"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:layout_marginLeft="20sp"
+                    android:background="@null"
+                    android:src="@drawable/ic_next"
+                    android:layout_toRightOf="@+id/btn_pause_play"
+                    android:foreground="?android:attr/selectableItemBackground"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
