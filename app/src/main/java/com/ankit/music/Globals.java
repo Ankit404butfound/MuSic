@@ -9,14 +9,19 @@ import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 
 public class Globals {
-    public static ArrayList<SongLayoutInfo> songDataArray = new ArrayList<>();
-    public static ArrayList<SongLayoutInfo> songDataArrayClone = new ArrayList<>();
-    public static ArrayList<SongLayoutInfo> playedSongDataArray = new ArrayList<>();
+    public static final int ID_SERVICE = 101;
+    public static final String FORWARD = "com.ankit.music.action.FORWARD";
+    public static final String BACK = "com.ankit.music.action.BACK";
+    public static final String PLAY = "com.ankit.music.action.PLAY";
+    public static final String PAUSE = "com.ankit.music.action.PAUSE";
+
+    public static NotificationManager notificationManager;
+    public static ArrayList<SongData> songDataArray = new ArrayList<>();
+    public static ArrayList<SongData> songDataArrayClone = new ArrayList<>();
+    public static ArrayList<SongData> playedSongDataArray = new ArrayList<>();
     public static TextView songTitle;
     public static DatabaseHandler databaseHandler;
     public static MusicHandler musicHandler;
@@ -27,9 +32,6 @@ public class Globals {
     public static TextView tv_total_time;
     public static SeekBar seekBar;
     public static ImageButton btn_play_pause;
-    public static TextView last_song_tv;
-    public static TextView previous_artist_tv;
-    public static ListView recyclerView;
     public static String loop_type = "shuffle";
     public static int selectedIndex;
     public static Notification.Builder builder;

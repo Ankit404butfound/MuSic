@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <service android:exported="false" android:name=".MusicService">
+        <service android:exported="false" android:name=".MusicService" android:stopWithTask="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
@@ -38,17 +38,10 @@
                 <action android:name="com.ankit.music.action.TOGGLE_PLAYBACK" />
                 <action android:name="com.ankit.music.action.PLAY" />
                 <action android:name="com.ankit.music.action.PAUSE" />
-                <action android:name="com.ankit.music.action.SKIP" />
-                <action android:name="com.ankit.music.action.REWIND" />
-                <action android:name="com.ankit.music.action.STOP" />
+                <action android:name="com.ankit.music.action.BACK" />
+                <action android:name="com.ankit.music.action.FORWARD" />
             </intent-filter>
         </service>
-        <receiver android:name="androidx.media.session.MediaButtonReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
-            </intent-filter>
-        </receiver>
 
     </application>
 

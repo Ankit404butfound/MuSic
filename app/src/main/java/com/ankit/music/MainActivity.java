@@ -5,14 +5,9 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,23 +15,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton list_control;
     private ImageButton btn_add_song;
     public int counter = 0;
+    public static android.app.NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Globals.tv_time_passed = findViewById(R.id.time_passed);
         Globals.tv_total_time = findViewById(R.id.total_time);
         Globals.seekBar = findViewById(R.id.seekbar);
+        notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //        Globals.recyclerView = findViewById(R.id.rv_song_list);
         btn_add_song = findViewById(R.id.btn_add_song);
         ImageButton btn_next = findViewById(R.id.btn_next);
@@ -179,16 +168,36 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Object> songInfo = songData.get(counter);
                 counter++;
                 String song = (String) songInfo.get(2);
-                String artistAndAlbum = (String) songInfo.get(3) + " | " + (String) songInfo.get(4);
+                String artistAndAlbum = songInfo.get(3) + " | " + songInfo.get(4);
                 String filename = Globals.appBasePath + songInfo.get(5);
 
                 Log.d(TAG, filename);
 
-                TextView containerTv = addSongContainer(song, artistAndAlbum, filename, false);
+//                TextView containerTv = addSongContainer(song, artistAndAlbum, filename, false);
 
-                SongLayoutInfo songLayoutInfo = new SongLayoutInfo(containerTv, song, artistAndAlbum, (Integer) songInfo.get(0), filename);
-                Globals.songDataArray.add(songLayoutInfo);
-                Globals.songDataArrayClone.add(songLayoutInfo);
+//                SongData songData = new SongData(containerTv, song, artistAndAlbum, (Integer) songInfo.get(0), filename);
+
+                View view = addSongContainer(song, artistAndAlbum, filename, false);
+                SongData songData = new SongData(view.findViewById(R.id.tv_song_info), song, artistAndAlbum, (Integer) songInfo.get(0), filename);
+
+                view.setOnClickListener(v -> {
+                    Globals.musicHandler.playSong(songData);
+                    Intent intent = new Intent(MainActivity.this, MusicService.class);
+                    intent.setAction(Globals.PLAY);
+                    intent.putExtra("song", song);
+                    intent.putExtra("path", filename);
+                    intent.putExtra("artistAlbum", artistAndAlbum);
+                    startForegroundService(intent);
+                    try {
+                        NotificationManager.updateNotification(song, artistAndAlbum);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                });
+
+                Globals.songDataArray.add(songData);
+                Globals.songDataArrayClone.add(songData);
 
 
                 delayHandler.postDelayed(this, 50);
@@ -212,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
         String path = FileUtil.getPath(uri, this);
         File file = new File(path);
         String fileName = file.getName();
+        String song = fileName.substring(0, fileName.lastIndexOf("."));
+        String artistAlbum = "IDK | YouTube maybe";
 
         try {
             File directory = new File(Globals.appBasePath);
@@ -230,15 +241,27 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        addSong(fileName.substring(0, fileName.lastIndexOf(".")), "IDK", "YouTube maybe", fileName);
-        TextView textView = addSongContainer(fileName.substring(0, fileName.lastIndexOf(".")), "IDK | YouTube maybe", fileName, true);
-        SongLayoutInfo songLayoutInfo = new SongLayoutInfo(textView, fileName.substring(0, fileName.lastIndexOf(".")), "IDK | YouTube maybe", Globals.databaseHandler.getMaxSongId(), fileName);
-        Globals.songDataArray.add(songLayoutInfo);
-        Globals.songDataArrayClone.add(songLayoutInfo);
+//        addSong(fileName.substring(0, fileName.lastIndexOf(".")), "IDK", "YouTube maybe", fileName);
+        View view = addSongContainer(song, artistAlbum, fileName, true);
+        SongData songData = new SongData(view.findViewById(R.id.tv_song_info), song, artistAlbum, Globals.databaseHandler.getMaxSongId(), fileName);
+
+        view.setOnClickListener(v -> {
+            NotificationManager.updateNotification(song, artistAlbum);
+            Globals.musicHandler.playSong(songData);
+            Intent intent = new Intent(this, MusicService.class);
+            intent.setAction(Globals.PLAY);
+            intent.putExtra("song", song);
+            intent.putExtra("path", fileName);
+            intent.putExtra("artistAlbum", artistAlbum);
+            startForegroundService(intent);
+        });
+
+        Globals.songDataArray.add(songData);
+        Globals.songDataArrayClone.add(songData);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public TextView addSongContainer(String song, String artistAlbum, String filename, Boolean addToFirst) {
+    public View addSongContainer(String song, String artistAlbum, String filename, Boolean addToFirst) {
         Log.d("path", filename);
         LinearLayout ll = findViewById(R.id.ll_song_list);
         View view = getLayoutInflater().inflate(R.layout.song_container_layout, null);
@@ -251,13 +274,7 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) view.findViewById(R.id.tv_artist_info)).setText(artistAlbum);
         float pixels = 60 * getResources().getDisplayMetrics().density;
         view.getLayoutParams().height = (int) pixels;
-        view.setOnClickListener(v -> {
-//            Globals.musicHandler.playSong(filename)
-            Intent intent = new Intent(this, MusicService.class);
-            intent.setAction(filename);
-            startForegroundService(intent);
-        });
-        return textView;
+        return view;
     }
 
     public void addSong(String song, String artist, String album, String filename) {

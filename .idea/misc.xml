@@ -11,7 +11,9 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.159" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.159" />
         <entry key="app/src/main/res/drawable/ic_pause.xml" value="0.169" />
+        <entry key="app/src/main/res/drawable/ic_pause_notif.xml" value="0.183" />
         <entry key="app/src/main/res/drawable/ic_play.xml" value="0.2015" />
+        <entry key="app/src/main/res/drawable/ic_play_notif.xml" value="0.2105" />
         <entry key="app/src/main/res/drawable/ic_shuffle.xml" value="0.1745" />
         <entry key="app/src/main/res/drawable/ic_three_dots.xml" value="0.1745" />
         <entry key="app/src/main/res/drawable/imgview_bg.xml" value="0.1745" />
@@ -20,7 +22,7 @@
         <entry key="app/src/main/res/layout/activity_add_song.xml" value="0.2957427536231884" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="app/src/main/res/layout/add_song_activity.xml" value="0.4" />
-        <entry key="app/src/main/res/layout/notification_layout.xml" value="0.1703125" />
+        <entry key="app/src/main/res/layout/notification_layout.xml" value="0.4" />
         <entry key="app/src/main/res/layout/song_container_layout.xml" value="0.264" />
       </map>
     </option>
