@@ -346,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
         else
             ll.addView(view);
 
+        
 //        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 //
 //        StrictMode.setThreadPolicy(policy);
