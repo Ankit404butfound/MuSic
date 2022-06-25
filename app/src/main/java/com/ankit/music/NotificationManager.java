@@ -16,5 +16,7 @@ public class NotificationManager {
         Globals.contentView.setTextViewText(R.id.artistAlbum, artistAlbum);
         Globals.contentView.setTextViewText(R.id.song, song);
         MainActivity.notificationManager.notify(1, Globals.builder.build());
+
     }
+
 }

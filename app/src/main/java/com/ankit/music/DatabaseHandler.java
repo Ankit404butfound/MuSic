@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY autoincrement, %s string, %s string, %s string, %s string, %s string, %s string DEFAULT 'n')", TABLE_NAME, SONG_ID, SONG_ICON, SONG, ARTIST, ALBUM, FILE_NAME, FAVOURITE);
+        db.execSQL(query);
+        query = "CREATE TABLE LASTSONGDATA (SONGID INT, DURATION INT)";
+        db.execSQL(query);
+        query = "INSERT INTO LASTSONGDATA VALUES(0, 0)";
         db.execSQL(query);
     }
 
@@ -71,6 +76,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return return_array;
         }
         return return_array;
+    }
+
+    public void saveLastSong(int songId, int duration){
+        Log.d("agsycfyuszgycsd", String.valueOf(songId)+String.valueOf(duration));
+        this.getWritableDatabase().execSQL(String.format("UPDATE LASTSONGDATA SET SONGID=%s, DURATION=%s", songId, duration));
+        this.getWritableDatabase().close();
+    }
+
+    public ArrayList getLastSong(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList returnArray = new ArrayList();
+        try {
+            Cursor cursor = db.rawQuery(String.format("SELECT * FROM LASTSONGDATA"), null);
+            Log.d("cursor", String.valueOf(cursor.getCount()));
+            cursor.moveToLast();
+            returnArray.add(cursor.getInt(0));
+            returnArray.add(cursor.getInt(1));
+            cursor.close();
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            returnArray.add(0);
+            returnArray.add(0);
+        }
+        Log.d("Retrunarray", returnArray.toString());
+        return returnArray;
     }
 
 

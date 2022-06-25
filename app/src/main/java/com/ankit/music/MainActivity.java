@@ -6,8 +6,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -15,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
@@ -22,6 +26,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -32,14 +37,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton list_control;
     private ImageButton btn_add_song;
+    private ImageButton btn_heart;
     public int counter = 0;
     public static android.app.NotificationManager notificationManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +67,48 @@ public class MainActivity extends AppCompatActivity {
         Globals.tv_total_time = findViewById(R.id.total_time);
         Globals.seekBar = findViewById(R.id.seekbar);
         notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        Globals.recyclerView = findViewById(R.id.rv_song_list);
+        btn_heart = findViewById(R.id.btn_heart);
         btn_add_song = findViewById(R.id.btn_add_song);
+        ArrayList lastSongData = Globals.databaseHandler.getLastSong();
         ImageButton btn_next = findViewById(R.id.btn_next);
+        ImageButton btn_prev = findViewById(R.id.btn_previous);
+
+
+        btn_heart.setOnClickListener(v -> {
+
+        });
 
         btn_next.setOnClickListener(c -> {
             Globals.musicHandler.playNextSong();
+            if (Globals.contentView == null){
+                Intent intent = new Intent(MainActivity.this, MusicService.class);
+                intent.setAction(Globals.PLAY);
+                startForegroundService(intent);
+            }
+            else {
+                android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                Globals.pause = false;
+                Globals.contentView.setImageViewResource(R.id.notif_play_pause, R.drawable.ic_pause_notif);
+                Intent pauseIntent = new Intent(Globals.PAUSE);
+                PendingIntent pause = PendingIntent.getService(getApplicationContext(), 22, pauseIntent, 0);
+                Globals.contentView.setOnClickPendingIntent(R.id.notif_play_pause, pause);
+
+                notificationManager.notify(1, Globals.builder.build());
+            }
+        });
+
+        btn_prev.setOnClickListener(c -> {
+            Globals.pause = false;
+            if (Globals.contentView == null)
+                return;
+            Globals.contentView.setImageViewResource(R.id.notif_play_pause, R.drawable.ic_pause_notif);
+            Intent pauseIntent = new Intent(Globals.PAUSE);
+            PendingIntent pause = PendingIntent.getService(getApplicationContext(), 22, pauseIntent, 0);
+            Globals.contentView.setOnClickPendingIntent(R.id.notif_play_pause, pause);
+
+            notificationManager.notify(1, Globals.builder.build());
+            Globals.musicHandler.playPreviousSong();
         });
 
         SpannableString title = new SpannableString(appTitle);
@@ -124,13 +169,28 @@ public class MainActivity extends AppCompatActivity {
         Globals.songTitle.setSelected(true);
 
         Globals.btn_play_pause.setOnClickListener(c -> {
+            if (Globals.contentView == null){
+                return;
+            }
             if (Globals.pause) {
                 Globals.btn_play_pause.setImageResource(R.drawable.ic_pause);
+
                 Globals.pause = false;
+                Globals.contentView.setImageViewResource(R.id.notif_play_pause, R.drawable.ic_pause_notif);
+                Intent pauseIntent = new Intent(Globals.PAUSE);
+                PendingIntent pause = PendingIntent.getService(getApplicationContext(), 22, pauseIntent, 0);
+                Globals.contentView.setOnClickPendingIntent(R.id.notif_play_pause, pause);
+
+                notificationManager.notify(1, Globals.builder.build());
                 Globals.player.start();
             } else {
                 Globals.btn_play_pause.setImageResource(R.drawable.ic_play);
                 Globals.pause = true;
+                Globals.contentView.setImageViewResource(R.id.notif_play_pause, R.drawable.ic_play_notif);
+                Intent playIntent = new Intent(Globals.PLAY);
+                PendingIntent play = PendingIntent.getService(getApplicationContext(), 22, playIntent, 0);
+                Globals.contentView.setOnClickPendingIntent(R.id.notif_play_pause, play);
+                notificationManager.notify(1, Globals.builder.build());
                 Globals.player.pause();
             }
         });
@@ -171,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 String artistAndAlbum = songInfo.get(3) + " | " + songInfo.get(4);
                 String filename = Globals.appBasePath + songInfo.get(5);
 
-                Log.d(TAG, filename);
+                Log.d("Tag", lastSongData.toString());
 
 //                TextView containerTv = addSongContainer(song, artistAndAlbum, filename, false);
 
@@ -181,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
                 SongData songData = new SongData(view.findViewById(R.id.tv_song_info), song, artistAndAlbum, (Integer) songInfo.get(0), filename);
 
                 view.setOnClickListener(v -> {
+                    Log.d("song", songData.toString());
+                    Globals.onStartSongData = songData;
                     Globals.musicHandler.playSong(songData);
                     Intent intent = new Intent(MainActivity.this, MusicService.class);
                     intent.setAction(Globals.PLAY);
@@ -198,6 +260,20 @@ public class MainActivity extends AppCompatActivity {
 
                 Globals.songDataArray.add(songData);
                 Globals.songDataArrayClone.add(songData);
+
+//                if (songData.songId == (int)(lastSongData.get(0))){
+//                    int progress = (Integer) lastSongData.get(1);
+//                    Globals.songDataArray.remove(songData);
+//                    Globals.playedSongDataArray.add(songData);
+//                    Globals.songTitle.setText(songData.song);
+//                    songData.textView.setTextColor(Color.parseColor("#FF0051"));
+//                    Globals.musicHandler.playSong(songData.songId, songData.filename, songData)
+//                    Globals.player.pause();
+//                    Globals.pause = true;
+//                    Globals.player.seekTo(progress);
+//                    Globals.seekBar.setProgress(progress);
+//                    Globals.tv_time_passed.setText(String.format("%02d:%02d", (progress / 60000) % 60, progress / 1000 % 60));
+//                }
 
 
                 delayHandler.postDelayed(this, 50);
@@ -269,6 +345,24 @@ public class MainActivity extends AppCompatActivity {
             ll.addView(view, 0);
         else
             ll.addView(view);
+
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//        StrictMode.setThreadPolicy(policy);
+//
+//        URL newurl = null;
+//        try {
+//            newurl = new URL("https://img.youtube.com/vi/p-EGZPWiWsQ/hqdefault.jpg");
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        ImageView imageView = view.findViewById(R.id.rounded_user_image);
+//        try {
+//            imageView.setImageBitmap(BitmapFactory.decodeStream(newurl.openConnection() .getInputStream()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         TextView textView = view.findViewById(R.id.tv_song_info);
         textView.setText(song);
         ((TextView) view.findViewById(R.id.tv_artist_info)).setText(artistAlbum);

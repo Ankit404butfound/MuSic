@@ -140,6 +140,7 @@
                 android:layout_marginBottom="10dp">
 
                 <ImageButton
+                    android:id="@+id/btn_heart"
                     android:layout_width="60sp"
                     android:layout_height="60sp"
                     android:layout_alignParentLeft="true"
@@ -166,7 +167,7 @@
                     android:id="@+id/btn_pause_play"
                     android:layout_width="60sp"
                     android:layout_height="60sp"
-                    android:src="@drawable/ic_pause"
+                    android:src="@drawable/ic_play"
                     android:background="@drawable/round_btn"
                     app:tint="@color/light_grey"
                     android:layout_centerInParent="true"
