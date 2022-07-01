@@ -14,23 +14,26 @@
 
     <application
         android:allowBackup="true"
+        android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:usesCleartextTraffic="true"
         android:preserveLegacyExternalStorage="true"
-        android:extractNativeLibs="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MuSic">
         <activity
+            android:name=".AddSong"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".ExitActivity"
             android:autoRemoveFromRecents="true"
             android:exported="false" />
         <activity
-            android:name=".add_song"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

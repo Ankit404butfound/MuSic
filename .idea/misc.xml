@@ -9,9 +9,11 @@
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.2105" />
         <entry key="app/src/main/res/drawable/ic_cross.xml" value="0.2105" />
         <entry key="app/src/main/res/drawable/ic_heart_plus.xml" value="0.283" />
+        <entry key="app/src/main/res/drawable/ic_iconmonstr_plus.xml" value="0.1635" />
         <entry key="app/src/main/res/drawable/ic_icons8_search.xml" value="0.159" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.159" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.159" />
+        <entry key="app/src/main/res/drawable/ic_loop_song.xml" value="0.1635" />
         <entry key="app/src/main/res/drawable/ic_pause.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_pause_notif.xml" value="0.183" />
         <entry key="app/src/main/res/drawable/ic_play.xml" value="0.2015" />
@@ -24,8 +26,14 @@
         <entry key="app/src/main/res/layout/activity_add_song.xml" value="0.2957427536231884" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="app/src/main/res/layout/add_song_activity.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/download_dialog.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/main_menu.xml" value="0.16770833333333332" />
         <entry key="app/src/main/res/layout/notification_layout.xml" value="0.4" />
         <entry key="app/src/main/res/layout/song_container_layout.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/toolbar.xml" value="0.16770833333333332" />
+        <entry key="app/src/main/res/layout/yt_dialog.xml" value="0.3188405797101449" />
+        <entry key="app/src/main/res/menu/main_menu.xml" value="0.4" />
+        <entry key="app/src/main/res/menu/song_config_menu.xml" value="0.340625" />
       </map>
     </option>
   </component>

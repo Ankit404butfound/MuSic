@@ -4,6 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".add_song">
+    android:background="@drawable/bg_gradient"
+    android:fitsSystemWindows="true"
+    tools:context=".AddSong">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:soundEffectsEnabled="true">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@null"
+            android:src="@drawable/ic_arrow_left"
+            app:tint="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_toEndOf="@+id/btn_back"
+            android:text="Adding Song"
+            android:textSize="40sp"
+            android:textColor="@color/raj_red"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/btn_back"
+            android:background="#151515"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="17sp"
+                android:textColor="@color/light_grey"
+                android:hint="Enter lyrics, links or YouTue URL"
+                android:textColorHint="#878787"
+                android:background="@null"/>
+
+            <EditText
+                android:id="@+id/edt_search"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:maxLines="1"
+                android:textColor="@color/light_grey"
+                android:hint="Type here..."
+                android:textColorHint="#878787"
+                android:background="#1CFFFFFF"
+                android:inputType="textCapSentences" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Downlodading"
+                android:textSize="17sp"
+                android:textColor="@color/light_grey"
+                android:visibility="invisible"
+                android:gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SEARCH"
+                android:textSize="30sp"
+                android:background="#D1FF0051"
+                android:layout_marginHorizontal="10dp"
+                android:textColor="@color/light_grey"
+                android:foreground="?android:attr/selectableItemBackground"/>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

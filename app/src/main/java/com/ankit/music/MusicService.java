@@ -2,6 +2,7 @@ package com.ankit.music;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -114,6 +115,7 @@ public class MusicService extends Service {
                         .setVibrate(new long[]{-1})
                         .setOnlyAlertOnce(true)
                         .setContent(Globals.contentView);
+        Log.d("Notif", "Notification created");
         startForeground(1, Globals.builder.build());
 
     }
@@ -143,9 +145,10 @@ public class MusicService extends Service {
     @RequiresApi(Build.VERSION_CODES.O)
     private String createNotificationChannel(String channelId ,String channelName){
         NotificationChannel chan = new NotificationChannel(channelId,
-                channelName, android.app.NotificationManager.IMPORTANCE_NONE);
+                channelName, NotificationManager.IMPORTANCE_HIGH);
         chan.setLightColor(Color.BLUE);
-        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        chan.setDescription("hi");
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
         android.app.NotificationManager manager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.createNotificationChannel(chan);
         return channelId;

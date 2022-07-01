@@ -1,6 +1,8 @@
 package com.ankit.music;
 
 
+import static com.ankit.music.Globals.btn_play_pause;
+import static com.ankit.music.Globals.ll;
 import static com.ankit.music.Globals.playedSongDataArray;
 import static com.ankit.music.Globals.playedSongOffset;
 import static com.ankit.music.Globals.player;
@@ -10,6 +12,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -68,7 +71,7 @@ public class MusicHandler {
             player.prepare();
         } catch (IOException ioException) {
             ioException.printStackTrace();
-
+            Toast.makeText(btn_play_pause.getContext(), "Error Playing Song", Toast.LENGTH_SHORT).show();
             player.start();
         }
     }
@@ -76,6 +79,7 @@ public class MusicHandler {
 
     public void playSong(SongData songData){
         updateColorsOfLastTv();
+        Globals.playedSongOffset = 1;
         if (Globals.songDataArray.contains(songData)){
             Globals.songDataArray.remove(songData);
         }
@@ -85,7 +89,14 @@ public class MusicHandler {
         Globals.playedSongDataArray.add(songData);
 //        NotificationManager.updateNotification(songData.song, songData.artistAlbum);
         songData.textView.setTextColor(Color.parseColor("#FF0051"));
-        playSong(songData.songId, songData.filename, songData.song, songData.artistAlbum);
+        try{
+            playSong(songData.songId, songData.filename, songData.song, songData.artistAlbum);
+        }
+        catch (Exception e){
+            Toast.makeText(btn_play_pause.getContext(), "Error Playing Song", Toast.LENGTH_SHORT).show();
+            Globals.playedSongDataArray.remove(songData);
+            e.printStackTrace();
+        }
     }
 
     public void updateColorsOfLastTv(){

@@ -38,6 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addSong(String song, String artist, String album, String filename) {
+        Log.d("saving", song+artist+album+filename);
         this.getWritableDatabase().execSQL(String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES('%s', '%s', '%s', '%s')", TABLE_NAME, SONG, ARTIST, ALBUM, FILE_NAME, song, artist, album, filename));
     }
 
@@ -119,16 +120,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     public void updateSong(int task_id, String title, String description) {
-
         SQLiteDatabase db = this.getWritableDatabase();
         String query = String.format("UPDATE %s set title='%1$s', description='%2$s', date_created=datetime('now', 'localtime') WHERE task_id=%3$s", title, description, task_id);
         db.execSQL(query);
     }
 
-    public void delete_task(int task_id) {
+
+    public void deleteSong(int songId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM tasks WHERE task_id="+task_id);
+        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE id="+songId);
     }
 
     @Override

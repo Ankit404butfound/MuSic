@@ -4,7 +4,9 @@ import android.app.Notification;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -40,5 +42,6 @@ public class Globals {
     public static Notification.Builder builder;
     public static RemoteViews contentView;
     public static int playedSongOffset = 1;
+    public static LinearLayout ll;
     public static String appBasePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MuSicData/";
 }

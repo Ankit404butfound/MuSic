@@ -62,10 +62,10 @@
         android:id="@+id/i_btn_song_config"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:background="@null"
         android:src="@drawable/ic_three_dots"
-        app:tint="@color/light_grey"/>
+        app:tint="@color/light_grey" />
 
 </RelativeLayout>

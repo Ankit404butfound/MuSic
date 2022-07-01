@@ -12,43 +12,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/btn_search"
-            android:background="@null"></androidx.appcompat.widget.Toolbar>
+        <include layout="@layout/toolbar"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/toolbar"
             android:background="#151515"/>
 
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_toLeftOf="@+id/btn_add_song"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@null"
-            android:src="@drawable/ic_icons8_search"
-            app:tint="@color/light_grey"
-            android:foreground="?android:attr/selectableItemBackground"/>
+<!--        <ImageButton-->
+<!--            android:id="@+id/btn_search"-->
+<!--            android:layout_toLeftOf="@+id/btn_add_song"-->
+<!--            android:layout_width="?attr/actionBarSize"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="@null"-->
+<!--            android:src="@drawable/ic_icons8_search"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            app:tint="@color/light_grey"-->
+<!--            android:foreground="?android:attr/selectableItemBackground"/>-->
 
 
-        <ImageButton
-            android:id="@+id/btn_add_song"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@null"
-            android:src="@drawable/ic_iconmonstr_plus"
-            app:tint="@color/light_grey"
-            android:textSize="40dp"
-            android:layout_alignParentRight="true"
-            android:foreground="?android:attr/selectableItemBackground"/>
+<!--        <ImageButton-->
+<!--            android:id="@+id/btn_add_song"-->
+<!--            android:layout_width="?attr/actionBarSize"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="@null"-->
+<!--            android:src="@drawable/ic_iconmonstr_plus"-->
+<!--            app:tint="@color/light_grey"-->
+<!--            android:textSize="40dp"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:foreground="?android:attr/selectableItemBackground"/>-->
 
 
         <ScrollView
+            android:id="@+id/sv_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/ll_controls"
@@ -67,13 +64,6 @@
 
         </ScrollView>
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/ll_song_list"-->
-<!--                android:orientation="vertical"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content">-->
-<!--            </LinearLayout>-->
-
 
         <LinearLayout
             android:id="@+id/ll_controls"
@@ -82,8 +72,7 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/linera_layout_bg"
             android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            android:layout_margin="5dp">
+            android:animateLayoutChanges="true">
 
             <TextView
                 android:id="@+id/lv_song_name"
@@ -91,12 +80,16 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:layout_margin="15sp"
+                android:shadowColor="@color/raj_red"
+                android:shadowDx="0.0"
+                android:shadowDy="0.0"
+                android:shadowRadius="5"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:textStyle="bold"
                 android:text="MuSic is Love"
                 android:textSize="25dp"
-                android:textColor="@color/light_grey"
+                android:textColor="@color/raj_red"
                 android:gravity="center"/>
 
 
@@ -167,11 +160,11 @@
                     android:id="@+id/btn_pause_play"
                     android:layout_width="60sp"
                     android:layout_height="60sp"
-                    android:src="@drawable/ic_play"
-                    android:background="@drawable/round_btn"
-                    app:tint="@color/light_grey"
                     android:layout_centerInParent="true"
-                    android:foreground="?android:attr/selectableItemBackground"/>
+                    android:background="@drawable/round_btn"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_play"
+                    app:tint="@color/light_grey" />
 
                 <ImageButton
                     app:tint="@color/raj_red"
@@ -198,6 +191,7 @@
             </RelativeLayout>
 
         </LinearLayout>
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
