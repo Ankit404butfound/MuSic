@@ -1,7 +1,6 @@
 package com.ankit.music;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;

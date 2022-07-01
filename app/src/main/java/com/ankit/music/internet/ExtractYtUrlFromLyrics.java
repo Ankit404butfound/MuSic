@@ -1,10 +1,6 @@
 package com.ankit.music.internet;
 
 import android.os.AsyncTask;
-import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -23,7 +19,6 @@ public class ExtractYtUrlFromLyrics extends AsyncTask<String, String, String> {
         int count = 0;
         try {
             url = new URL(BASE_URL+arg[0]);
-            Log.d("URL", url.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;

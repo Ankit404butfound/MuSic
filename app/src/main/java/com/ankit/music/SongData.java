@@ -1,6 +1,5 @@
 package com.ankit.music;
 
-import android.text.SpannableString;
 import android.widget.TextView;
 
 public class SongData {

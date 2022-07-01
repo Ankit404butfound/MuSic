@@ -1,20 +1,14 @@
 package com.ankit.music;
 
-
 import static com.ankit.music.Globals.btn_play_pause;
-import static com.ankit.music.Globals.ll;
 import static com.ankit.music.Globals.playedSongDataArray;
-import static com.ankit.music.Globals.playedSongOffset;
 import static com.ankit.music.Globals.player;
 import static com.ankit.music.Globals.songDataArray;
 
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Random;
@@ -55,13 +49,6 @@ public class MusicHandler {
                         } else {
                             playNextSong();
 
-
-//                                int songCurrentTime = player.getCurrentPosition();
-//                                Globals.seekBar.setProgress(songCurrentTime);
-//                                songCurrentTime = songCurrentTime / 1000;
-//                                Globals.tv_time_passed.setText(String.format("%02d:%02d", songCurrentTime / 60, songCurrentTime % 60));
-//                                Globals.pause = true;
-//                                Globals.btn_play_pause.setImageResource(R.drawable.ic_play);
                         }
                     }
                 });
@@ -87,7 +74,6 @@ public class MusicHandler {
             Globals.playedSongDataArray.remove(songData);
         }
         Globals.playedSongDataArray.add(songData);
-//        NotificationManager.updateNotification(songData.song, songData.artistAlbum);
         songData.textView.setTextColor(Color.parseColor("#FF0051"));
         try{
             playSong(songData.songId, songData.filename, songData.song, songData.artistAlbum);
@@ -109,14 +95,11 @@ public class MusicHandler {
     public void playNextSong() {
 
         int index = 0;
-        Log.d("taggg", Globals.songDataArray.toString());
         updateColorsOfLastTv();
         Globals.playedSongOffset = 1;
         int length = Globals.songDataArray.size();
-        Log.d("Sizee", String.valueOf(Globals.songDataArrayClone.size()));
         if (length < 1) {
             if (Globals.songDataArrayClone.size() > 0) {
-                Log.d("Inside", String.valueOf(length));
                 SongData lastSongData = Globals.playedSongDataArray.get(Globals.playedSongDataArray.size() - Globals.playedSongOffset);
                 Globals.songDataArray.addAll(Globals.songDataArrayClone);
                 Globals.playedSongDataArray.clear();
@@ -130,18 +113,15 @@ public class MusicHandler {
         }
 
         else {
-            Log.d("Loop_type", Globals.loop_type);
             if (Globals.loop_type.matches("shuffle")) {
                 Random random = new Random();
                 index = random.nextInt(length);
-                Log.d("num", String.valueOf(index));
             } else {
                 index = 0;
             }
 
             SongData nextSongData = Globals.songDataArray.get(index);
             nextSongData.textView.setTextColor(Color.parseColor("#FF0051"));
-            Log.d("Data", nextSongData.textView.getText().toString());
             Globals.playedSongDataArray.add(nextSongData);
             Globals.songDataArray.remove(nextSongData);
             try {

@@ -8,13 +8,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 public class MusicService extends Service {
@@ -24,12 +21,8 @@ public class MusicService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("tag", "onStartCommand"+intent.getAction().toString());
         android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        NotificationManager.updateNotification(this, intent, notificationManager);
-//        if (Globals.contentView == null){
-//            createNotification();
-//        }
+
         if (intent.getAction().matches(Globals.PLAY)) {
             if (intent.hasExtra("song")){
                 String artistAlbum = intent.getStringExtra("artistAlbum");
@@ -79,9 +72,7 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("onCreate", "OnCreate");
 
-//        Notification.Builder builder = android.app.NotificationManager.createNotification(this, getPackageName());
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
             createNotificationChannel("channelID", "channelName");
         }
@@ -115,29 +106,22 @@ public class MusicService extends Service {
                         .setVibrate(new long[]{-1})
                         .setOnlyAlertOnce(true)
                         .setContent(Globals.contentView);
-        Log.d("Notif", "Notification created");
         startForeground(1, Globals.builder.build());
 
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // A client is binding to the service with bindService()
-        Log.d("tag", "onBind");
         return binder;
     }
 
     @Override
     public void onDestroy() {
-        Log.d("tag", "onDestroy");
-        Log.d("ID", String.valueOf(Globals.currentSongid));
         Globals.databaseHandler.saveLastSong(Globals.currentSongid, Globals.player.getCurrentPosition());
         Globals.player.pause();
         Globals.player.reset();
         Globals.player = null;
         this.stopForeground(true);
-        //do something you want
-        //stop service
         this.stopSelf();
         android.os.Process.killProcess(android.os.Process.myPid());
     }

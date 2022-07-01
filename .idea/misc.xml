@@ -6,10 +6,12 @@
         <entry key="app/src/main/res/drawable/bg_gradient.xml" value="0.295" />
         <entry key="app/src/main/res/drawable/border.xml" value="0.1635" />
         <entry key="app/src/main/res/drawable/control_bg_gradient.xml" value="0.283" />
+        <entry key="app/src/main/res/drawable/ic_arrow_left.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.2105" />
         <entry key="app/src/main/res/drawable/ic_cross.xml" value="0.2105" />
         <entry key="app/src/main/res/drawable/ic_heart_plus.xml" value="0.283" />
         <entry key="app/src/main/res/drawable/ic_iconmonstr_plus.xml" value="0.1635" />
+        <entry key="app/src/main/res/drawable/ic_iconmonstr_plus_thin.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_icons8_search.xml" value="0.159" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.159" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.159" />

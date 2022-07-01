@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addSong(String song, String artist, String album, String filename) {
-        Log.d("saving", song+artist+album+filename);
         this.getWritableDatabase().execSQL(String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES('%s', '%s', '%s', '%s')", TABLE_NAME, SONG, ARTIST, ALBUM, FILE_NAME, song, artist, album, filename));
     }
 
@@ -80,7 +78,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void saveLastSong(int songId, int duration){
-        Log.d("agsycfyuszgycsd", String.valueOf(songId)+String.valueOf(duration));
         this.getWritableDatabase().execSQL(String.format("UPDATE LASTSONGDATA SET SONGID=%s, DURATION=%s", songId, duration));
         this.getWritableDatabase().close();
     }
@@ -90,7 +87,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList returnArray = new ArrayList();
         try {
             Cursor cursor = db.rawQuery(String.format("SELECT * FROM LASTSONGDATA"), null);
-            Log.d("cursor", String.valueOf(cursor.getCount()));
             cursor.moveToLast();
             returnArray.add(cursor.getInt(0));
             returnArray.add(cursor.getInt(1));
@@ -100,7 +96,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             returnArray.add(0);
             returnArray.add(0);
         }
-        Log.d("Retrunarray", returnArray.toString());
         return returnArray;
     }
 

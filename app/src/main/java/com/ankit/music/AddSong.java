@@ -1,16 +1,11 @@
 package com.ankit.music;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -18,10 +13,8 @@ import com.ankit.music.internet.DownloadFileFromRawURl;
 import com.ankit.music.internet.ExtractRawUrlFromYtURL;
 import com.ankit.music.internet.ExtractYtUrlFromLyrics;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,7 +46,6 @@ public class AddSong extends AppCompatActivity {
                     Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(userInput);
             if (matcher.matches()){
-                System.out.println("Youtube url"+userInput);
 
                 YtUrlToRaw(userInput, matcher.group(0)+".mp3");
             }
@@ -61,12 +53,10 @@ public class AddSong extends AppCompatActivity {
             else if(userInput.matches("http(s)?://(www\\.)?.*")){
                 ArrayList<String> data = new ArrayList<>(Arrays.asList(userInput.split("/")));
                 RawToFile(userInput, data.get(data.size()-1));
-                System.out.println("Raw url");
             }
             else {
                 lyricsToYtUrl(userInput);
                 song = userInput;
-                System.out.println("Lyrics");
             }
         });
     }
@@ -101,7 +91,6 @@ public class AddSong extends AppCompatActivity {
                 }
 
                 status.setText("Converting to mp3... ");
-                Log.d("datttta", result);
                 if (song == null)
                     song = result.split("\n")[1];
                 imgPath = result.split("\n")[2];
@@ -127,7 +116,6 @@ public class AddSong extends AppCompatActivity {
                 }
 
                 status.setText("Download completed!!!");
-                Log.d("Data", filename + song + imgPath);
                 Intent resultIntent = new Intent(); //String filename, String song, String imgPath
                 resultIntent.putExtra("filename", filename);
                 resultIntent.putExtra("song", song);

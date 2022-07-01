@@ -1,20 +1,15 @@
 package com.ankit.music;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,23 +17,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,27 +35,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 
 /* TODO:
     2. Edit Song
-    3. Search
     4. Favourites
 */
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton list_control;
-    private ImageButton btn_add_song;
     private ImageButton btn_heart;
-    private ScrollView sv_main;
-    private ScrollView sv_search;
-    private Boolean isSearchViewVisible = false;
-    private Runnable searcher;
-    private Handler search_handler;
-    private android.widget.SearchView mSearchView;
     public int counter = 0;
     public static android.app.NotificationManager notificationManager;
 
@@ -83,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         Globals.ll = findViewById(R.id.ll_song_list);
 
         list_control = findViewById(R.id.i_btn_list_ctrl);
-        sv_main = findViewById(R.id.sv_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         Globals.songTitle = findViewById(R.id.lv_song_name);
         Globals.btn_play_pause = findViewById(R.id.btn_pause_play);
@@ -92,16 +69,12 @@ public class MainActivity extends AppCompatActivity {
         Globals.seekBar = findViewById(R.id.seekbar);
         notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         btn_heart = findViewById(R.id.btn_heart);
-//        btn_add_song = findViewById(R.id.btn_add_song);
         ArrayList lastSongData = Globals.databaseHandler.getLastSong();
         ImageButton btn_next = findViewById(R.id.btn_next);
         ImageButton btn_prev = findViewById(R.id.btn_previous);
 
 
-
-
         btn_heart.setOnClickListener(v -> {
-
         });
 
         btn_next.setOnClickListener(c -> {
@@ -143,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.light_grey));
         toolbar.setTitle(title);
         toolbar.setTitleTextColor(getResources().getColor(R.color.raj_red));
-
         toolbar.setOverflowIcon(getDrawable(R.drawable.ic_iconmonstr_plus));
         setSupportActionBar(toolbar);
 
@@ -162,18 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 mHandler.postDelayed(this, 0);
             }
         });
-
-
-        // LISTENERS
-
-//        btn_add_song.setOnClickListener(c -> {
-//            Globals.pluscClicked = true;
-//            Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-//            chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-//            chooseFile.setType("*/*");
-//            chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-//            startActivityForResult(chooseFile, 2222);
-//        });
 
 
         Globals.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -251,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void run() {
-                Log.d("Indisde", "populator");
                 if (!(counter < songData.size())) {
                     delayHandler.removeCallbacks(this);
                     return;
@@ -262,8 +221,6 @@ public class MainActivity extends AppCompatActivity {
                 String artistAndAlbum = songInfo.get(3) + " | " + songInfo.get(4);
                 String filename = Globals.appBasePath + songInfo.get(5);
 
-                Log.d("Tag", lastSongData.toString());
-
                 View view = addSongContainer(song, artistAndAlbum, filename, false);
                 SongData songData = new SongData(view.findViewById(R.id.tv_song_info), song, artistAndAlbum, (Integer) songInfo.get(0), filename);
 
@@ -273,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 view.setOnClickListener(v -> {
-                    Log.d("song", songData.toString());
                     Globals.onStartSongData = songData;
                     Globals.musicHandler.playSong(songData);
                     Intent intent = new Intent(MainActivity.this, MusicService.class);
@@ -293,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
                 Globals.songDataArray.add(songData);
                 Globals.songDataArrayClone.add(songData);
 
-
                 delayHandler.postDelayed(this, 50);
 
                 }
@@ -302,11 +257,8 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
@@ -314,13 +266,8 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.add_from_sd) {
             if (checkSelfPermission(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 22);
@@ -347,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // If the user doesn't pick a file just return
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("code", String.valueOf(requestCode));
         if (requestCode == 2223){
             addNewDownloadedSong(data.getStringExtra("filename"), data.getStringExtra("song"), data.getStringExtra("imgPath"));
             return;
@@ -371,16 +317,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Log.d("path", path);
-        Log.d("path", Globals.appBasePath + fileName);
-
         Globals.databaseHandler.addSong(fileName.substring(0, fileName.lastIndexOf(".")), "Unknown", "Unknown", fileName);
         try {
             FileUtils.copy(new FileInputStream(path), new FileOutputStream(Globals.appBasePath + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        addSong(fileName.substring(0, fileName.lastIndexOf(".")), "IDK", "YouTube maybe", fileName);
         View view = addSongContainer(song, artistAlbum, Globals.appBasePath+fileName, true);
         SongData songData = new SongData(view.findViewById(R.id.tv_song_info), song, artistAlbum, Globals.databaseHandler.getMaxSongId(), Globals.appBasePath+fileName);
 
@@ -390,7 +332,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         view.setOnClickListener(v -> {
-            Log.d("song", songData.toString());
             Globals.onStartSongData = songData;
             Globals.musicHandler.playSong(songData);
             Intent intent = new Intent(this, MusicService.class);
@@ -413,7 +354,6 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View addSongContainer(String song, String artistAlbum, String filename, Boolean addToFirst) {
-        Log.d("path", filename);
         View view;
         LinearLayout ll;
         ll = findViewById(R.id.ll_song_list);
@@ -432,18 +372,6 @@ public class MainActivity extends AppCompatActivity {
         return view;
     }
 
-    public void addSong(String song, String artist, String album, String filename) {
-
-
-//        RecyclerView.ViewHolder holder = Globals.recyclerView.findViewHolderForAdapterPosition(0);
-//        RelativeLayout insertedRL = holder.itemView.findViewById(R.id.rl_parent);
-//        ArrayList<Object> array_member = new ArrayList<>();
-//        array_member.add(insertedRL);
-//        array_member.add(filename);
-//
-//        Globals.songDataArrayClone.add(0, array_member);
-//        Globals.songDataArray.add(0, array_member);
-    }
 
     public void showMenu(SongData songData, View view, View parentView){
         PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);//View will be an anchor for PopupMenu
@@ -465,7 +393,6 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addNewDownloadedSong(String filename, String song, String imgPath){
-        Log.d("datassss", filename+song+imgPath);
         Globals.databaseHandler.addSong(filename.substring(0, filename.lastIndexOf(".")), "Unknown", "Unknown", filename);
         filename = Globals.appBasePath + filename;
         View view = addSongContainer(song, "Unknown | Unknown", filename, true);
@@ -478,7 +405,6 @@ public class MainActivity extends AppCompatActivity {
 
         String finalFilename = filename;
         view.setOnClickListener(v -> {
-            Log.d("song", songData.toString());
             Globals.onStartSongData = songData;
             Globals.musicHandler.playSong(songData);
             Intent intent = new Intent(MainActivity.this, MusicService.class);
@@ -499,64 +425,3 @@ public class MainActivity extends AppCompatActivity {
         Globals.songDataArrayClone.add(0, songData);
     }
 }
-
-//            String sName = "Tum Mile to jina aa gya";
-//            String artistAndAlbum = "Arijit Singh | Youtube";
-//
-//            SpannableString songDetails = new SpannableString(sName + "\n" + artistAndAlbum);
-//            songDetails.setSpan(new StyleSpan(Typeface.BOLD), 0, sName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            songDetails.setSpan(new RelativeSizeSpan(1.5f), 0, sName.length(), 0);
-//
-//            myListData.add(0, new SongInfo(songDetails, 1234, android.R.drawable.ic_dialog_email));
-//
-//            adapter.notifyItemInserted(0);
-//
-//            Globals.recyclerView.smoothScrollToPosition(0);
-//
-//            databaseHandler.addSong("Eak tum hi ho", "IDK", "YouTube maybe");
-//
-
-
-//            lv_song_info.setText(songDetails);
-//            songsContainer.addView(songContainer);
-//            float pixels = 65 * getResources().getDisplayMetrics().density;
-//            songContainer.getLayoutParams().height = (int) pixels;
-
-
-//                            mediaPlayer.stop();
-//                            mediaPlayer.release();
-//                            mediaPlayer = null;
-//                            player = null;
-
-
-//        try {
-//            Log.d("File Path", path);
-//
-//            player.setDataSource(path);
-//            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                @Override
-//                public void onPrepared(MediaPlayer mediaPlayer) {
-//                    mediaPlayer.start();
-//                    int songDuration = mediaPlayer.getDuration();
-//                    seekBar.setMax(songDuration);
-//                    tv_total_time.setText(String.format("%02d:%02d", (songDuration/60000)%60, (songDuration/1000)%60));
-//                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                        @Override
-//                        public void onCompletion(MediaPlayer mediaPlayer) {
-//                            int songCurrentTime = player.getCurrentPosition();
-//                            seekBar.setProgress(songCurrentTime);
-//                            songCurrentTime = songCurrentTime / 1000;
-//                            tv_time_passed.setText(String.format("%02d:%02d", songCurrentTime/60, songCurrentTime%60));
-//                            pause = true;
-//                            btn_play_pause.setImageResource(R.drawable.ic_play);
-//                        }
-//                    });
-//                }
-//            });
-//            player.prepare();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        player.start();
-//    }

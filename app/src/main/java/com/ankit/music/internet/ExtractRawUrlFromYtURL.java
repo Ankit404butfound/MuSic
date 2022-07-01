@@ -9,9 +9,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ExtractRawUrlFromYtURL  extends AsyncTask<String, String, String> {
     String BASE_URL = "https://api.vevioz.com/convert?url=";
@@ -23,7 +20,6 @@ public class ExtractRawUrlFromYtURL  extends AsyncTask<String, String, String> {
         String song = null;
         String imgPath = null;
         String ytUrl = args[0];
-        Log.d("URL", BASE_URL+ytUrl);
         URL url;
         try {
             url = new URL(BASE_URL+ytUrl);
